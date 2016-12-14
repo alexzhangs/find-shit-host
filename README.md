@@ -57,17 +57,17 @@ ff:ff:ff:ff:ff:ff \
     -e yourname@example.com
 ```
 
+More usage:
+
+```
+sh find-shit-host/find-host.sh -h
+```
+
 ## Cron Job
 
 Setup a cron job, run every 10 minutes to check host by IP and MAC,
 if found alive host, will run traceroute and send email notification.
 
 ```
-*/10 * * * * /path/to/find-host.sh \
-    -c 192.168.0.100/24 \
-    -m ff:ff:ff:ff:ff:ff \
-    -n '-b 10240' \
-    -t '-w 1 -m 8' \
-    -e yourname@example.com \
-    >> /tmp/find-host.log 2>&1
+*/10 * * * * /path/to/find-host.sh -c 192.168.0.100/24 -m ff:ff:ff:ff:ff:ff -n '-b 10240' -t '-w 1 -m 8' -e yourname@example.com >> /tmp/find-host.log 2>&1
 ```
