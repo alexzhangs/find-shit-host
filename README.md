@@ -7,10 +7,15 @@ Tested on Linux.
 
 ### nbtscan
 
-Download and install nbtscan.
+install nbtscan RPM by yum:
 
 ```
-http://ftp.tu-chemnitz.de/nbtscan-1.5.1-1.2.el6.rf.i686.rpm
+yum install http://ftp.tu-chemnitz.de/nbtscan-1.5.1-1.2.el6.rf.i686.rpm
+```
+
+Or Download from here:
+
+```
 http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/i386/rpmforge/RPMS/
 ```
 
