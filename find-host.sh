@@ -139,10 +139,6 @@ while getopts c:m:n:t:e:h opt; do
     esac
 done
 
-logger "started to find host: $ip/$bit, mac: $mac, notify: $email"
-logger "nbtscan options: $nbtscan_options"
-logger "traceroute options: $traceroute_options"
-
 ip=$(get_cidr_ip "$cidr")
 bit=$(get_cidr_bit "$cidr")
 [[ -z $bit ]] && bit=24
@@ -156,6 +152,10 @@ elif is_broadcast_ip "$ip" && test -n "$mac"; then
 else
     usage
 fi
+
+logger "started to find host: $ip/$bit, mac: $mac, notify: $email"
+logger "nbtscan options: $nbtscan_options"
+logger "traceroute options: $traceroute_options"
 
 out="$(main)"
 ret=$?
