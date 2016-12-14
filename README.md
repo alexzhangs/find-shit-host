@@ -45,13 +45,12 @@ Find host with IP 192.168.0.100 and MAC address ff:ff:ff:ff:ff:ff in subnet 192.
 sh find-shit-host/find-host.sh -c 192.168.0.100/24 -m ff:ff:ff:ff:ff:ff
 ```
 
-Find above host, limiting `1 kbps` bandwidth to use for nbtscan, `1 second`
+Find above host, limiting `10 kbps` bandwidth to use for nbtscan, `1 second`
 timeout, `max 8 hops` for traceroute.
 And send email to `yourname@example.com` if found host.
 
 ```
-sh find-shit-host/find-host.sh -c 192.168.0.100/24 -m
-ff:ff:ff:ff:ff:ff \
+sh find-shit-host/find-host.sh -c 192.168.0.100/24 -m ff:ff:ff:ff:ff:ff \
     -n '-b 10240' \
     -t '-w 1 -m 8' \
     -e yourname@example.com
