@@ -153,9 +153,10 @@ else
     usage
 fi
 
-logger "started to find host: $ip/$bit, mac: $mac, notify: $email"
+logger "started to find host: $ip/$bit $mac"
 logger "nbtscan options: $nbtscan_options"
 logger "traceroute options: $traceroute_options"
+logger "notify: $email"
 
 out="$(main)"
 ret=$?
