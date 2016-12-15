@@ -77,7 +77,7 @@ probe_host () {
 
     logger "nbtscan $ip"
     local out="$(/usr/sbin/nbtscan $nbtscan_options "$ip" 2>&1)"
-    echo "$out" | egrep -qw "$found_pattern"
+    echo "$out" | egrep -iqw "$found_pattern"
     ret=$((ret && $?))
     echo "$out"
 
@@ -90,7 +90,7 @@ probe_host () {
 search_host () {
     logger "nbtscan $ip/$bit"
     local out="$(/usr/sbin/nbtscan $nbtscan_options "$ip/$bit" 2>&1)"
-    echo "$out" | egrep -qw "$found_pattern"
+    echo "$out" | egrep -iqw "$found_pattern"
     local ret=$?
     echo "$out"
 
