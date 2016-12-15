@@ -69,20 +69,26 @@ EOF
 }
 
 probe_host () {
-    /bin/ping -t 1 -c 3 "$ip"
+    local ping_options='-t 1 -c 3'
+
+    logger "ping $ip"
+    /bin/ping $ping_options "$ip"
     local ret=$?
 
-    local out="$(/usr/sbin/nbtscan -r $nbtscan_options "$ip" 2>&1)"
+    logger "nbtscan $ip"
+    local out="$(/usr/sbin/nbtscan $nbtscan_options "$ip" 2>&1)"
     echo "$out" | egrep -qw "$found_pattern"
     ret=$((ret && $?))
     echo "$out"
 
+    logger "traceroute $ip"
     /bin/traceroute $traceroute_options "$ip"
 
     return $ret
 }
 
 search_host () {
+    logger "nbtscan $ip/$bit"
     local out="$(/usr/sbin/nbtscan $nbtscan_options "$ip/$bit" 2>&1)"
     echo "$out" | egrep -qw "$found_pattern"
     local ret=$?
@@ -93,6 +99,11 @@ search_host () {
 
 main () {
     local ret
+
+    logger "started to find host: $ip/$bit $mac"
+    logger "nbtscan options: $nbtscan_options"
+    logger "traceroute options: $traceroute_options"
+    logger "notify: $email"
 
     if ! is_broadcast_ip "$ip"; then
         logger "probing $ip\n\n"
@@ -111,6 +122,11 @@ main () {
         :
     fi
 
+    if [[ $ret -eq 0 ]]; then
+        logger '==> SHIT FOUND <=='
+    else
+        logger '==> NO SHIT FOUND <=='
+    fi
     return $ret
 }
 
@@ -153,21 +169,10 @@ else
     usage
 fi
 
-logger "started to find host: $ip/$bit $mac"
-logger "nbtscan options: $nbtscan_options"
-logger "traceroute options: $traceroute_options"
-logger "notify: $email"
-
 out="$(main)"
 ret=$?
 echo "$out"
-
-if [[ $ret -eq 0 ]]; then
-    logger '==> SHIT FOUND <=='
-    notify
-else
-    logger '==> NO SHIT FOUND <=='
-fi
+[[ $ret -eq 0 ]] && notify
 
 logger "done"
 
