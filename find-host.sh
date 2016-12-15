@@ -139,6 +139,7 @@ while getopts c:m:n:t:e:h opt; do
             ;;
         m)
             mac=$OPTARG
+            mac_alias=$(echo $mac | sed 's/:/-/g')
             ;;
         n)
             nbtscan_options=$OPTARG
@@ -160,11 +161,11 @@ bit=$(get_cidr_bit "$cidr")
 [[ -z $bit ]] && bit=24
 
 if ! is_broadcast_ip "$ip" && test -n "$mac"; then
-    found_pattern="(^$ip|$mac)"
+    found_pattern="(^$ip|$mac|$mac_alias)"
 elif ! is_broadcast_ip "$ip" && test -z "$mac"; then
     found_pattern="^$ip"
 elif is_broadcast_ip "$ip" && test -n "$mac"; then
-    found_pattern="$mac"
+    found_pattern="($mac|$mac_alias)"
 else
     usage
 fi
