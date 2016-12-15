@@ -75,14 +75,19 @@ probe_host () {
     /bin/ping $ping_options "$ip"
     local ret=$?
 
+    local nmap_options='-A -T4 -p1-200,443,8000-8100,9000-9100'
+
     logger "nbtscan $ip"
     local out="$(/usr/sbin/nbtscan $nbtscan_options "$ip" 2>&1)"
     echo "$out" | egrep -iqw "$found_pattern"
     ret=$((ret && $?))
     echo "$out"
 
-    logger "traceroute $ip"
-    /bin/traceroute $traceroute_options "$ip"
+    logger "nmap $ip"
+    local out="$(/usr/bin/nmap $nmap_options "$ip" 2>&1)"
+    echo "$out" | egrep -iqw "$found_pattern"
+    ret=$((ret && $?))
+    echo "$out"
 
     return $ret
 }
@@ -161,9 +166,9 @@ bit=$(get_cidr_bit "$cidr")
 [[ -z $bit ]] && bit=24
 
 if ! is_broadcast_ip "$ip" && test -n "$mac"; then
-    found_pattern="(^$ip|$mac|$mac_alias)"
+    found_pattern="(^$ip|Nmap scan report for $ip|$mac|$mac_alias)"
 elif ! is_broadcast_ip "$ip" && test -z "$mac"; then
-    found_pattern="^$ip"
+    found_pattern="(^$ip|Nmap scan report for $ip)"
 elif is_broadcast_ip "$ip" && test -n "$mac"; then
     found_pattern="($mac|$mac_alias)"
 else
